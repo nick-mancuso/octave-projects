@@ -21,19 +21,23 @@ format short;
     function newton(x, s, f, f_prime)
         oe=abs(x-s); % keep a copy of error
         out=[]; % output
-        for i=1:6 % do 6 iterations
+        ite=0;
+        res=1;
+        while (res>1e-8) && (ite<50)
             xnew=x-f(x)/f_prime(x);
             e=abs(xnew-s);
             out=[out; x f(x) f_prime(x) e e/oe^2 ];
             %printf("x%d = %s\n", i -1, rats(x))
             x=xnew;
             oe=e;
+            ite=ite+1;
+            res=abs(f(xnew));
         end
 
         printf("x_i     f(x_i)      f'(x_i)     e_{i+1}     e_{i+1}/e_i^2\n")
-        %rats(out, 12),
         out,
-        format long; out(:,2)
+        x,
+        %format short; out(:,2)
     endfunction
 
     f=inline('54*x.^6 + 45*x.^5 - 102*x.^4 - 69*x.^3 + 35*x.^2 + 16*x - 4');
@@ -49,7 +53,6 @@ format short;
     plot(x, f(x), x, 0*x);
 
     % do all bracket guesses
-    %p0=1;p1=4;
     bracket(-0.666666, -0.6666667, f);
     bracket(0.25, 0.75, f);
     bracket(-1.4, -1.3, f);
@@ -58,7 +61,6 @@ format short;
 
 
     % do all newton guesses
-    x=1; s=0.75488; % initial x_i, solution s
     newton(-0.7,-0.6666666667, f, f_prime);
     newton(0.499, 0.5, f, f_prime);
     newton(-1.4, -1.3813, f, f_prime);
