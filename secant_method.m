@@ -1,5 +1,9 @@
-f = inline('x.^3-13*x.^2+52*x-60');
+#f = inline('x.^3-13*x.^2+52*x-60');
+f = @(x) x.^3-13*x.^2+52*x-60
 x0 = 0; x1 = 3;
+fx1=f(x0), fx2=f(x1),
+#roots(f),
+root=fzero(f, x0),
 
 for i = 2:4,
     x2 = x1 - (f(x1)) * ((x1 - x0) / (f(x1) - f(x0)));
@@ -8,3 +12,4 @@ for i = 2:4,
     x0 = x1;
     x1 = x2;
 end;
+
